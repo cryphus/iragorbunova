@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HorizontalCard from "../components/HorizontalCard.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../lib/createSlug"
+
+const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const last_posts = posts.slice(0, 3);
+---
+
+<BaseLayout sideBarActiveItemID="home">
+  <div class="pb-12 mt-5">
+    <div class="text-xl py-1">Привет 👋</div>
+    <div class="text-5xl font-bold">Я Ира Горбунова</div>
+    <div class="text-3xl py-3 font-bold">Программист</div>
+    <div class="py-2">
+      <text class="text-lg">
+        Это <b>Ира Горбунова</b>. Люблю писать код, рисовать и путешествовать. Иногда решаю задачи на литкоде.
+      </text>
+    </div>
+    <div class="mt-8">
+      <a class="btn" href="https://github.com" target="_blank">Давайте познакомимся!</a>
+      <a href="https://github.com/" target="_blank" class="btn btn-outline ml-5">Ira Gorbunova на GitHub</a>
+    </div>
+  </div>
+
+  <div>
+    <div class="text-3xl w-full font-bold mb-2">Мои последние проекты</div>
+  </div>
+
+  <HorizontalCard
+    title="Демо проект 1"s
+    img="/post_img1.jpg"
+    desc="Описание проекта"
+    url="#"
+    badge="НОВЫЙ"
+  />
+  <div class="divider my-0"></div>
+  <HorizontalCard
+    title="Демо проект 2"
+    img="/post_img2.jpg"
+    desc="Описание проекта"
+    url="#"
+  />
+  <div class="divider my-0"></div>
+  <HorizontalCard
+    title="Демо проект 3"
+    img="/post_img3.jpg"
+    desc="Описание проекта"
+    url="#"
+    badge="Закончен"
+  />
+
+  <div>
+    <div class="text-3xl w-full font-bold mb-5 mt-10">Последние из блога</div>
+  </div>
+
+  {
+    last_posts.map((post) => (
+      <>
+        <HorizontalCard
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/blog/" + createSlug(post.data.title, post.slug)}
+          target="_self"
+          badge={post.data.badge}
+        />
+        <div class="divider my-0" />
+      </>
+    ))
+  }
+</BaseLayout>
